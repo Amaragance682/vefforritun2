@@ -34,8 +34,7 @@ export function generateIndexHTML(data) {
   `;
 }
 
-function generateCategoryHTML(category) {
-  // console.log(category, "gaming");
+export function generateCategoryHTML(category) {
   const title = category.title;
 
   const content = category.content;
@@ -80,7 +79,7 @@ function generateCategoryHTML(category) {
         
         `;
         } catch (error) {
-          console.error("Error in question", question, error);
+          console.error("Error in question", error);
           return null;
         }
       }).join('')}
@@ -100,7 +99,6 @@ function generateCategoryHTML(category) {
 async function main() {
 
   const indexData = await readJson(INDEX_PATH);
-  console.log("went into main in generateHTML.js");
   if (!Array.isArray(indexData)) {
     console.error('index.json is not an array. Check the file format.');
     return [];
@@ -147,7 +145,7 @@ async function main() {
   
 }
 
-function isNullOneLevel(data) {
+export function isNullOneLevel(data) {
   if (!data) {
     return true;
   }
@@ -159,7 +157,7 @@ function isNullOneLevel(data) {
   return false;
 }
 
-function escapeHTML(unsafe) {
+export function escapeHTML(unsafe) {
   return unsafe
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -168,5 +166,9 @@ function escapeHTML(unsafe) {
     .replace(/'/g, '&#039;');
 };
 
-main();
-
+if (import.meta.url.endsWith(process.argv[1])) {
+  main().catch((error) => {
+    console.error('Error in main:', error);
+    process.exit(1);
+  });
+}

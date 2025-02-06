@@ -18,7 +18,6 @@ export async function readJson(filePath) {
 
 
 export async function validateIndexDataItem(data) {
-  // Must have { title: string, file: string }
   if (
     !data ||
     typeof data.title !== 'string' ||
@@ -30,10 +29,9 @@ export async function validateIndexDataItem(data) {
   const filePath = path.join('data', data.file);
   try {
     await access(filePath);
-    // If access() works, file exists → item is valid
     return true;
   } catch (error) {
-    console.error(`Skipping "${data.title}" because ${data.file} not found`, error.message);
+    console.log(error.message);
     return false;
   }
 }
